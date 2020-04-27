@@ -33,6 +33,7 @@ You can also document commands to lint the code or run tests. These steps help t
 
 ## Authors and acknowledgment
 Show your appreciation to those who have contributed to the project.
+<img src="https://avatars3.githubusercontent.com/u/59551782?v=4" alt="drawing" width="200"/>
 
 # License
 For open source projects, say how it is licensed.
