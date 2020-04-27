@@ -23,8 +23,10 @@ function genarateReadMe(readMe) {
   
   ### Installation
   ${readMe.install}
+  ${readMe.installCode}
   ### Usage
   ${readMe.usage}
+  ${readMe.usageCode}
   ### Badges
   ${readMe.badges}
   ### License ![License](${readMe.licence})
@@ -86,20 +88,34 @@ function getDescritpion() {
 
 function getInstallation() {
   return inquirer
-    .prompt([{
-      type: "input",
-      message: "Write installation instructions",
-      name: "install"
-    }])
+    .prompt([
+      {
+        type: "input",
+        message: "Write installation instructions (press enter for code snippits)",
+        name: "install"
+      },
+      {
+        type: "input",
+        message: "Installation code snips (separate by commas)",
+        name: "installCode"
+      }
+    ])
 } //end getInstall
 
 function getUsage() {
   return inquirer
-    .prompt([{
-      type: "input",
-      message: "How is your app used",
-      name: "usage"
-    }])
+    .prompt([
+      {
+        type: "input",
+        message: "Anything special about using your code? (or press enter for code snippet)",
+        name: "usage"
+      },
+      {
+        type: "input",
+        message: "Code snippet to run program",
+        name: "usageCode"
+      }
+  ])
 } //end getUsage
 
 function getVersion() {
@@ -161,11 +177,9 @@ function getStatus() {
 async function init() {
   const readMe = {
     id: (await getUsername()).id,
-    photo: await (githubInfo(this.id)),
+    photo : await (githubInfo(this.id)),
     name : (await getProjectName()).name,
     description : (await getDescritpion()).description,
-    install : (await getInstallation()).install,
-    usage : (await getUsage()).usage,
     version : `https://img.shields.io/badge/Version-${(await getVersion()).version}-green`,
     licence : `https://img.shields.io/badge/License-${(await getLicense()).licence}-blue`,
     contributing: (await getContributing()).contributing,
@@ -174,6 +188,13 @@ async function init() {
     status : (await getStatus()).status,
   };
   
+  const installInstructions = await getInstallation();
+  readMe.install = installInstructions.install;
+  readMe.installCode = "```\n "+installInstructions.installCode+" \n```";
+
+  const usageInstructions = await getUsage();
+  readMe.usage = usageInstructions.usage;
+  readMe.usageCode = "```\n "+usageInstructions.usageCode+" \n```";
 
   console.log(readMe);
 
