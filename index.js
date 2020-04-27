@@ -35,8 +35,9 @@ function genarateReadMe(readMe) {
   ${readMe.contributing}
   ### Tests
   ${readMe.tests}
-  ### Questions
-  ${readMe.questions}
+  ### Questions or Issues
+  If you have any questions or have found issues with the program, please reach out to ${readMe.name}
+  <img src="${readMe.photo}" alt="Github Avatar" width="200"/> [Email](${readMe.email})
   ### Project Status
   ${readMe.status}`
   // console.log('hit');
@@ -52,7 +53,7 @@ function githubInfo(id) {
           reject(err);
         }
         else{
-          resolve(body.avatar_url); //json object
+          resolve(body); //json object
         }
       }
     );
@@ -155,15 +156,6 @@ function getTests() {
     }])
 } //end getTests
 
-function getQuestions() {
-  return inquirer
-    .prompt([{
-      type: "input",
-      message: "If someone has a question, how do they contact you?",
-      name: "questions"
-    }])
-} //end getQuestions
-
 function getStatus() {
   return inquirer
     .prompt([{
@@ -173,18 +165,15 @@ function getStatus() {
     }])
 } //end getStatus
 
-
 async function init() {
   const readMe = {
     id: (await getUsername()).id,
-    photo : await (githubInfo(this.id)),
     name : (await getProjectName()).name,
     description : (await getDescritpion()).description,
     version : `https://img.shields.io/badge/Version-${(await getVersion()).version}-green`,
     licence : `https://img.shields.io/badge/License-${(await getLicense()).licence}-blue`,
     contributing: (await getContributing()).contributing,
     tests : (await getTests()).tests,
-    questions : (await getQuestions()).questions,
     status : (await getStatus()).status,
   };
   
@@ -196,11 +185,18 @@ async function init() {
   readMe.usage = usageInstructions.usage;
   readMe.usageCode = "```\n "+usageInstructions.usageCode+" \n```";
 
+  const gitInfo = await (githubInfo(readMe.id));
+  readMe.photo = gitInfo.avatar_url;
+  readMe.email = gitInfo.email;
+  readMe.userName = gitInfo.name;
+
   console.log(readMe);
 
   writeFile("readme2.md", genarateReadMe(readMe))
     .then(() => console.log("file created successfully!"))
     .catch(error => console.log(error));
+
+  
 };
 
 init();
