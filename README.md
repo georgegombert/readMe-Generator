@@ -31,5 +31,6 @@
   ### Questions or Issues
   If you have any questions or have found issues with the program, please reach out to ReadMe Generator
   <img src="https://avatars3.githubusercontent.com/u/59551782?v=4" alt="Github Avatar" width="200"/> [Email](null)
+  
   ### Project Status
   The code generates readme files with good formatting. The next step is to add functionallity to create github repos and add the readme file to it. Tests are also planned for the file in the future. Fun fact is that this readme was generated using the program!
