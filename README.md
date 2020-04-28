@@ -1,5 +1,5 @@
 Link to video: https://drive.google.com/file/d/1_46Oys4j56zqlBm9-hzVaWLzkXduS4yw/view?usp=sharing
-this readme was created with the generator
+this readme was created with the generator (deleting this top section after you grade this)
 ****
 ## ReadMe Generator
   ![Version](https://img.shields.io/badge/Version-1.0-green)
