@@ -248,14 +248,13 @@ async function init() {
     readMe.email = gitInfo.email;
     readMe.userName = gitInfo.name;
 
-    console.log(readMe);
+    
 
-    // writeFile("README.md", genarateReadMe(readMe))
-    //   .then(() => console.log("file created successfully!"))
-    //   .catch(error => console.log(error));
+    writeFile("README.md", genarateReadMe(readMe))
+      .then(() => console.log("file created successfully!"))
+      .catch(error => console.log(error));
 
     const repoDetails = await createRepo();
-    console.log(repoDetails.repoDescription);
 
     makeRepo(readMe.id, repoDetails.gitPasword, readMe.name, repoDetails.repoDescription);
     
