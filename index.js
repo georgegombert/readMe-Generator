@@ -216,7 +216,9 @@ async function makeRepo(username, password, repoName, repoDescription){
     "name": repoName,
     "description": repoDescription,
   }, () => {}); //create repo
-  // ghrepo.createContents('/'+username+'/hub', 'commit test', 'putting a test in the readme', (x) => console.log(x)); // add file
+  // ghrepo.createContents('/'+username+'/'+repoName+'/blob/master/', 'commit test', 'putting a test in the readme', (x) => console.log(x)); // add file
+  // still trying to figure out how to add the file. I think in the future I will proably just do it all with the github api 
+  // here is a link to what i'm thinking http://techslides.com/create-repositories-with-github-api-and-html5
 }
 
 async function init() {
