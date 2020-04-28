@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 const util = require('util');
-const github = require('octonode'); //https://github.com/pksunkara/octonode recourses. use to create repo
+const github = require('octonode');
 const writeFile = util.promisify(fs.writeFile);
 
 
@@ -26,7 +26,7 @@ function genarateReadMe(readMe) {
   ### Usage
   ${readMe.usage}
   ${readMe.usageCode}
-  
+
   ### License ![License](${readMe.licence})
   
   ### Contributing
