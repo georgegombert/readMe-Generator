@@ -163,39 +163,103 @@ function getStatus() {
     }])
 } //end getStatus
 
-async function init() {
-  const readMe = {
-    id: (await getUsername()).id,
-    name : (await getProjectName()).name,
-    description : (await getDescritpion()).description,
-    version : `https://img.shields.io/badge/Version-${(await getVersion()).version}-green`,
-    licence : `https://img.shields.io/badge/License-${(await getLicense()).licence}-blue`,
-    contributing: (await getContributing()).contributing,
-    tests : (await getTests()).tests,
-    status : (await getStatus()).status,
-    
+function createRepo(){
+  return inquirer
+  .prompt([{
+    type: "confirm",
+    message: "Do you want to create a repository with the following readme?",
+    name: "repoChoice"
+  }])
+  .then(answer => {
+    if (answer.repoChoice == true){
+      return inquirer
+        .prompt([
+          {
+            type: "input",
+            message: "Repository Description:",
+            name: "repoDescription"
+          },
+          {
+            type: "password",
+            message: "Github Password:",
+            name: "gitPasword"
+          },
+        ])
+    } else{
+      console.log("You are finished. Enjoy your readme!")
+    }
+  })
+
+}
+
+async function makeRepo(username, password, repoName, repoDescription){
+  const client = github.client({
+    username: username,
+    password: password,
+  });
+
+  const ghme = client.me();
+  const ghrepo = client.repo(''+username+'/hub');
+  const scopes = {
+    'scopes': ['user', 'repo', 'gist'],
+    'note': 'admin script'
   };
   
-  const installInstructions = await getInstallation();
-  readMe.install = installInstructions.install;
-  readMe.installCode = "```\n "+installInstructions.installCode+" \n```";
-
-  const usageInstructions = await getUsage();
-  readMe.usage = usageInstructions.usage;
-  readMe.usageCode = "```\n "+usageInstructions.usageCode+" \n```";
-
-  const gitInfo = await (githubInfo(readMe.id));
-  readMe.photo = gitInfo.avatar_url;
-  readMe.email = gitInfo.email;
-  readMe.userName = gitInfo.name;
-
-  console.log(readMe);
-
-  writeFile("README.md", genarateReadMe(readMe))
-    .then(() => console.log("file created successfully!"))
-    .catch(error => console.log(error));
-
+  client.get('/user', {}, () => {});
   
+  github.auth.config({
+    username: username,
+    password: password,
+  }); //auth user
+
+  ghme.repo({
+    "name": repoName,
+    "description": repoDescription,
+  }, () => {}); //create repo
+  // ghrepo.createContents('/'+username+'/hub', 'commit test', 'putting a test in the readme', (x) => console.log(x)); // add file
+}
+
+async function init() {
+  try{
+    const readMe = {
+      id: (await getUsername()).id,
+      name : (await getProjectName()).name,
+      description : (await getDescritpion()).description,
+      version : `https://img.shields.io/badge/Version-${(await getVersion()).version}-green`,
+      licence : `https://img.shields.io/badge/License-${(await getLicense()).licence}-blue`,
+      contributing: (await getContributing()).contributing,
+      tests : (await getTests()).tests,
+      status : (await getStatus()).status,
+      
+    };
+    
+    const installInstructions = await getInstallation();
+    readMe.install = installInstructions.install;
+    readMe.installCode = "```\n "+installInstructions.installCode+" \n```";
+
+    const usageInstructions = await getUsage();
+    readMe.usage = usageInstructions.usage;
+    readMe.usageCode = "```\n "+usageInstructions.usageCode+" \n```";
+
+    const gitInfo = await (githubInfo(readMe.id));
+    readMe.photo = gitInfo.avatar_url;
+    readMe.email = gitInfo.email;
+    readMe.userName = gitInfo.name;
+
+    console.log(readMe);
+
+    // writeFile("README.md", genarateReadMe(readMe))
+    //   .then(() => console.log("file created successfully!"))
+    //   .catch(error => console.log(error));
+
+    const repoDetails = await createRepo();
+    console.log(repoDetails.repoDescription);
+
+    makeRepo(readMe.id, repoDetails.gitPasword, readMe.name, repoDetails.repoDescription);
+    
+  } catch(err){
+    console.log(err);
+  }
 };
 
 init();
