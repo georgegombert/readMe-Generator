@@ -14,7 +14,6 @@ function genarateReadMe(readMe) {
   ### Table of Contents
   [Installation](#Installation)
   [Usage](#Usage)
-  [Badges](#Badges)
   [Licence](#Licence)
   [Contributing](#Contributing)
   [Tests](#Tests)
@@ -27,8 +26,7 @@ function genarateReadMe(readMe) {
   ### Usage
   ${readMe.usage}
   ${readMe.usageCode}
-  ### Badges
-  ${readMe.badges}
+  
   ### License ![License](${readMe.licence})
   
   ### Contributing
@@ -175,6 +173,7 @@ async function init() {
     contributing: (await getContributing()).contributing,
     tests : (await getTests()).tests,
     status : (await getStatus()).status,
+    
   };
   
   const installInstructions = await getInstallation();
@@ -192,7 +191,7 @@ async function init() {
 
   console.log(readMe);
 
-  writeFile("readme2.md", genarateReadMe(readMe))
+  writeFile("README.md", genarateReadMe(readMe))
     .then(() => console.log("file created successfully!"))
     .catch(error => console.log(error));
 
